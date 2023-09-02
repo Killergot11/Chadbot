@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title style="margin-left: 300px;">Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+   
+</head>
+
+<body>
+    <h1 style="color:white; font-family: 'Orbitron';margin-left: 30px;">ChadBot</h1>
+    <button id="sidebar-button" style="align-self: right; padding: 7px 7px; background-color: rgb(66 133 244);border-radius: 6px;"><b>More</b></button>
+    <form action="https://www.google.com/search" method="get" target="_blank" id="google-search" style="margin-left: 300px;">
+        <img align="left" height="40px" width="120px" src="https://assets.stickpng.com/images/580b57fcd9996e24bc43c51f.png" alt="google" id="imagee">
+        <input type="text" name="q" autocomplete="off" placeholder=" Enter what you would like to search.." required id="search-box">
+    </form>
+    <div class="sidebar-hide" id="sidebar">
+        <button id="close-sidebar-button" style="align-self: right;padding: 10px;background-color: rgb(66 133 244);border-radius: 6px;"><b>Close</b></button>
+        <a href="https://www.learncbse.in/" target="_blank" id="learncbse">LearnCBSE</a>
+        <a href="https://www.toppr.com/ask/" target="_blank" id="toppr">Toppr</a>
+        <a href="https://www.w3schools.com/" target="_blank" id="w3schools">W3Schools</a>
+        <a href="https://www.duolingo.com/" target="_blank" id="duolingo">Duolingo</a>
+    </div>
+    <div style="display: flex;">
+        <div id="chat-box" style="height: 300px;width: 700px; overflow-y: scroll;margin-left: 300px; border: 1px solid #ccc; padding: 10px;"></div>
+        <img id="chatimage" alt="">
+        <iframe id="chatvid" height="315" width="559"></iframe>
+    </div>
+    <input type="text" id="user-input" style="width: 30%;margin-left: 300px;" placeholder="Type your message...">
+    <button onclick="sendMessage()" id="submit-button"><b>Send</b></button>
+    <button onclick="startRecognition();" id="speak-button"><img align="right" height="40px" width="40px" style="margin-top: 10px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH8AAAB/CAMAAADxY+0hAAAAYFBMVEX///8AAADo6OiIiIigoKAgICB1dXUyMjIODg77+/vw8PCSkpK8vLz09PSZmZnX19dGRkY8PDzg4ODOzs5tbW1BQUEbGxutra0lJSVUVFQqKiqmpqZNTU1jY2PExMR9fX0M7ZCvAAAEF0lEQVRoge2b6bKjIBCFVbKhkhg10cSo7/+Wc3OHZokii5KqmeL8RPSL0DTGPkaRo5IcFfFftXVXYdfrOIk0j1Ms6YkuX6Pj7hrPqC6/g69uc/S3sm/MAlLR35HgfRJIsYD/UeMXn8zOvKidT3wqTX176PIfoZe0Fjp/ePwSOGc+1yQXD+Te+LVA/wj1y4MfSzzhc0Z4TJc63rGjhZ9lSO4AqGcBAwsDPyGQMbyiQwUd7j5mIIHbeyi7sAlCHviQ99qFm8sM+jiKQOZZynD4aNDJTQO98nWxF8xAsTkfmd0ZBEm6NR9GVtPt7CkJEnrdXtMP1uB5Y/7FMLAgAlU5wlUQWIOuI30+OG7Mb2hm0z7jjWZxYiu6u+y1iQUFfuAHfuAHfuAHfuAHfuAHfuAHfuAHfuAHfuAHfuBrVB16JMDW8PO63hFLfPd7EV5iXMH/fSN7tfsB5d+L8GKHO58WTuxKUvC6m+Hc+fSF9MmJzybAnd+7BCTwK2hwf/9OC8P3dXzj+sPtM3Jenw0mgmobKyO5119og7pqOqeS1tFYJdm5/oTplUYrPmk/z3Ktv9GVbFsTn4yaYf2R9uL1x8lMmmmyamBgbeuvMCCWzhw4jS0As/rzc9KJ1uNayw1gWsd0q7/j2CX8oyihd/JgVgs3/wE0WduCwM/C5435L1RrEEJN9F+AZaZSnKNUM7kV7j/pZ/0n3B7D11pKW262+3+U0DOPvJLPAa9l/w1vhTC2yz6/ghUoJI4DQ0zq65XggOKjn0LWcvDFwd3u+WBL/qtM9F+Jrjgh08CYvFwcSXsA8aZUct+19W4YhhwVKv9ZAhHj5Ibo4IqClyNReh9B4kJj8+WCjwjcluhlIC8Fd+ZOYc929QSyAZBS7qL/UlwXLBnfHf1omM22lD0qpQVT9p8yt56zF4YltKtk58HNrAvzICcFlg9sU78gFkA3uZ3kWv9xww6t8MSyEJzeRJKPR3bwPPFfMy/eOjMgv8xrLoOnSVnObseCVXINnifwn6xu4aljKydu1xrBeM4/mu6heGTn3FcbosWcb5ZHRI/yBjY0LCz3Qj8EmM/YVi44MecfNH8A86fQWftnzUxE8BbHp1H9C0guJqbTdh7AMRbVN7MJvURSWnxaP/ItqIll1Ts5sNMcfeTk27YOzHK68bc92nVNtzsfZjakrf2PEV7adz9lsE7sJVrcF3XqrJ+2zZS3Jvhxc+8t19Br4PezR/pbJVJ/gXJSrMxtRSpUTCfidO0bXx8+TJUM3XhjDyf7PssvnmJuQfBqafO1bqiU8jN918AP/MD/z/jfzj8kK46SYM+TW3sfDx9vvPbdC8jPR5iZHgwD4mMjxKaPX7HD29Z/gB+d9Vyq1X+6Z6V79cbl6QtU3IwHAyGb78D/ADClMH6H9eN0AAAAAElFTkSuQmCC"></button>
+    </script>
+    <script>
+        let sidebar = false;
+
+        let recognition = new webkitSpeechRecognition();
+        recognition.onstart = () => {
+            appendMessage('Bot', 'Listening...');
+        }
+        recognition.onresult = (e) => {
+            var transcript = e.results[0][0].transcript;
+            var confidence = e.results[0][0].confidence;
+            document.getElementById("user-input").value = transcript;
+            sendMessage();
+        }
+
+        function typeWriter(text, i, messageDiv) {
+            if (i < text.length) {
+                messageDiv.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(function() {
+                    typeWriter(text, i, messageDiv);
+                }, 50); // Adjust the typing speed here (milliseconds)
+            } else {
+                messageDiv.classList.remove('typing');
+            }
+        }
+
+        function appendMessage(sender, message) {
+            const chatBox = document.getElementById('chat-box');
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = sender + ': ';
+            
+            // Apply the typing class to the bot's reply
+            if (sender === 'Bot') {
+                messageDiv.classList.add('bot-reply', 'typing');
+            }
+
+            // Use typeWriter for the typing effect
+            typeWriter(message, 0, messageDiv);
+
+            // Append the message to the chat box
+            chatBox.appendChild(messageDiv);
+        }
+
+        function startRecognition() {
+            recognition.start();
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            appendMessage('You', userInput);
+
+            fetch('/get_response', {
+                method: 'POST',
+                body: new URLSearchParams({ user_input: userInput }),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    appendMessage('Bot', data.response);
+
+                    // Create a new SpeechSynthesisUtterance object
+                    let utterance = new SpeechSynthesisUtterance();
+
+                    // Set the text and voice of the utterance
+                    utterance.text = data.response;
+                    utterance.voice = window.speechSynthesis.getVoices()[0];
+
+                    // Speak the utterance
+                    window.speechSynthesis.speak(utterance);
+
+                    document.getElementById('chatimage').src = data.imageurl;
+
+                    let vid = document.getElementById("chatvid")
+
+                    if (data.vidurl) {
+                        vid.style.visibility = 'visible'
+                        vid.src = data.vidurl;
+                    } else {
+                        vid.style.visibility = 'hidden';
+                    }
+                });
+
+            document.getElementById('user-input').value = '';
+        }
+    </script>
+</body>
+
+</html>
